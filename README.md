@@ -24,7 +24,7 @@ import (
 
 func main() {
   // 创建一个类型安全的TMap(封装sync.Map)
-	ssm := TMap[string, string]{}
+	ssm := ts.TMap[string, string]{}
 
 	ssm.Store("foo", "bar")
 	fmt.Println(ssm.Load("foo"))
