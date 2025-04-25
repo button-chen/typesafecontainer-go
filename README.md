@@ -1,0 +1,1 @@
+# typesafecontainer-go
