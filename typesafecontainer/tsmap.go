@@ -24,26 +24,17 @@ func (tm *TMap[K, V]) Delete(key K) {
 
 func (tm *TMap[K, V]) Load(key K) (V, bool) {
 	v, ok := tm.m.Load(key)
-	if !ok {
-		return tm.zerovalue(), ok
-	}
-	return v.(V), ok
+	return tm.cast(v), ok
 }
 
 func (tm *TMap[K, V]) LoadAndDelete(key K) (V, bool) {
 	v, ok := tm.m.LoadAndDelete(key)
-	if !ok {
-		return tm.zerovalue(), ok
-	}
-	return v.(V), ok
+	return tm.cast(v), ok
 }
 
 func (tm *TMap[K, V]) LoadOrStore(key K, value V) (V, bool) {
 	v, ok := tm.m.LoadOrStore(key, value)
-	if !ok {
-		return tm.zerovalue(), ok
-	}
-	return v.(V), ok
+	return tm.cast(v), ok
 }
 
 func (tm *TMap[K, V]) Store(key K, value V) {
@@ -52,10 +43,7 @@ func (tm *TMap[K, V]) Store(key K, value V) {
 
 func (tm *TMap[K, V]) Swap(key K, value V) (V, bool) {
 	v, ok := tm.m.Swap(key, value)
-	if !ok {
-		return tm.zerovalue(), ok
-	}
-	return v.(V), ok
+	return tm.cast(v), ok
 }
 
 func (tm *TMap[K, V]) Range(f func(key K, value V) bool) {
@@ -64,9 +52,13 @@ func (tm *TMap[K, V]) Range(f func(key K, value V) bool) {
 	})
 }
 
-func (tm *TMap[K, V]) zerovalue() V {
-	var zero V
-	return zero
+func (tm *TMap[K, V]) cast(val any) V {
+	v, ok := val.(V)
+	if ok {
+		return v
+	}
+	var zv V
+	return zv
 }
 
 type StringStringMap = TMap[string, string]
